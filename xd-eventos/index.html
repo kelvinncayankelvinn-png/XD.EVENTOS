@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XD Eventos</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+html{ scroll-behavior:smooth; }
+
+body{
+    background:#050505;
+    color:white;
+}
+
+/* HEADER */
+header{
+    width:100%;
+    padding:20px 8%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#000;
+    position:fixed;
+    top:0;
+    z-index:1000;
+}
+
+.logo{
+    color:#70FFBA;
+    font-size:32px;
+    font-weight:bold;
+    cursor:pointer;
+    user-select:none;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    margin:0 15px;
+}
+
+nav a:hover{ color:#70FFBA; }
+
+.whatsapp{
+    background:#70FFBA;
+    color:black;
+    padding:12px 20px;
+    border-radius:12px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+/* HERO */
+.hero{
+    height:100vh;
+    background:
+        linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)),
+        url('imagens/image-24.webp');
+    background-size:cover;
+    background-position:center;
+    display:flex;
+    align-items:center;
+    padding:0 8%;
+}
+
+.hero-content{ max-width:650px; }
+
+.hero h1{
+    font-size:72px;
+    line-height:75px;
+    margin-bottom:20px;
+}
+
+.hero span{ color:#70FFBA; }
+
+.hero p{
+    font-size:22px;
+    color:#ccc;
+    margin-bottom:30px;
+}
+
+.buttons{ display:flex; gap:20px; }
+
+.btn{
+    padding:15px 30px;
+    border-radius:12px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.btn-primary{ background:#70FFBA; color:black; }
+.btn-secondary{ border:2px solid white; color:white; }
+
+/* GALERIA */
+.section{ padding:100px 8%; }
+
+.title{
+    text-align:center;
+    margin-bottom:50px;
+}
+
+.title h2{ font-size:48px; }
+.title span{ color:#70FFBA; }
+
+.gallery{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+}
+
+.gallery img{
+    width:100%;
+    height:350px;
+    object-fit:cover;
+    border-radius:20px;
+    border:2px solid #70FFBA;
+    display:block;
+}
+
+/* INFO */
+.info-box{
+    border:2px solid #70FFBA;
+    border-radius:20px;
+    padding:40px;
+    margin-top:60px;
+}
+
+.info-box h3{
+    color:#70FFBA;
+    font-size:36px;
+    margin-bottom:20px;
+}
+
+.info-box p,
+.info-box li{
+    font-size:20px;
+    color:#00c298;
+    margin-bottom:12px;
+}
+
+.info-box ul{ margin-left:20px; }
+
+/* RESERVA */
+.reserva-area{
+    background:#029b60;
+    padding:80px 8%;
+}
+
+.reserva-card{
+    background:white;
+    color:black;
+    max-width:1000px;
+    margin:auto;
+    padding:55px;
+    border-radius:20px;
+}
+
+.reserva-card > label{
+    display:block;
+    margin-bottom:10px;
+    font-size:18px;
+    font-weight:bold;
+}
+
+/* NAVEGAÇÃO */
+.cal-nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:16px;
+}
+
+.cal-nav button{
+    background:#70FFBA;
+    border:none;
+    border-radius:8px;
+    padding:8px 18px;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    color:black;
+    transition:background .2s;
+}
+
+.cal-nav button:hover{ background:#3de8a0; }
+.cal-nav button:disabled{ opacity:.3; cursor:default; }
+
+.cal-nav span{
+    font-size:18px;
+    font-weight:bold;
+    color:#222;
+}
+
+/* CALENDÁRIO */
+.calendario{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:8px;
+    margin-bottom:20px;
+}
+
+.dia-nome{
+    text-align:center;
+    font-weight:bold;
+    color:#555;
+    font-size:13px;
+    padding:4px 0;
+}
+
+.dia{
+    border-radius:10px;
+    border:1px solid #ddd;
+    background:#f8f8f8;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:6px 2px;
+    min-height:48px;
+    cursor:pointer;
+    transition:background .15s;
+    font-size:14px;
+}
+
+.dia .num{ font-size:16px; font-weight:bold; }
+.dia .preco{ font-size:11px; color:#555; margin-top:2px; }
+
+.dia:hover{ background:#b6ffdf; }
+
+/* selecionado pelo cliente */
+.dia.selecionado{
+    background:#70FFBA;
+    border-color:#00c298;
+}
+
+.dia.selecionado .preco{ color:#006644; }
+
+/* dia passado */
+.dia.passado{
+    opacity:.3;
+    cursor:default;
+    pointer-events:none;
+}
+
+/* bloqueado pelo admin */
+.dia.bloqueado{
+    background:#f5f5f5;
+    opacity:.35;
+    cursor:not-allowed;
+    pointer-events:none;
+    text-decoration:line-through;
+}
+
+/* admin: dia bloqueado */
+.dia.admin-bloqueado{
+    background:#ffdddd !important;
+    border:2px solid #ff6666 !important;
+    opacity:1 !important;
+    cursor:pointer !important;
+    pointer-events:all !important;
+}
+
+/* CAIXA DE VALOR */
+.valor-box{
+    background:#f4f4f4;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:24px;
+    display:none;
+}
+
+.valor-box p{ margin-bottom:6px; font-size:15px; }
+.valor-box strong{ color:#22dd76; font-size:22px; }
+
+/* LEGENDA */
+.legenda{
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+    margin-bottom:24px;
+    font-size:13px;
+    color:#555;
+}
+
+.legenda-item{ display:flex; align-items:center; gap:6px; }
+
+.legenda-cor{
+    width:16px;
+    height:16px;
+    border-radius:4px;
+    border:1px solid #ccc;
+}
+
+/* BOTÃO CONFIRMAR */
+.continuar button{
+    width:100%;
+    background:#70FFBA;
+    color:black;
+    border:none;
+    padding:18px;
+    border-radius:35px;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* MODAL ADMIN */
+.modal-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    z-index:9999;
+    align-items:center;
+    justify-content:center;
+}
+
+.modal-overlay.ativo{ display:flex; }
+
+.modal-box{
+    background:white;
+    border-radius:20px;
+    padding:40px;
+    width:90%;
+    max-width:400px;
+    color:black;
+    text-align:center;
+}
+
+.modal-box h3{
+    font-size:22px;
+    margin-bottom:20px;
+}
+
+.modal-box input{
+    width:100%;
+    padding:14px;
+    border-radius:10px;
+    border:1px solid #ddd;
+    font-size:16px;
+    margin-bottom:12px;
+    text-align:center;
+    letter-spacing:4px;
+}
+
+.modal-box button{
+    width:100%;
+    padding:14px;
+    border-radius:10px;
+    border:none;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-bottom:8px;
+}
+
+.btn-entrar{ background:#70FFBA; color:black; }
+.btn-fechar{ background:#eee; color:#555; }
+
+.erro-senha{
+    color:red;
+    font-size:13px;
+    margin-bottom:10px;
+    display:none;
+}
+
+/* BARRA ADMIN */
+.admin-bar{
+    display:none;
+    background:#111;
+    color:#70FFBA;
+    text-align:center;
+    padding:12px 20px;
+    font-size:14px;
+    font-weight:bold;
+    position:fixed;
+    bottom:0;
+    width:100%;
+    z-index:1000;
+    gap:20px;
+    align-items:center;
+    justify-content:center;
+}
+
+.admin-bar.ativo{ display:flex; }
+
+.admin-bar button{
+    background:#70FFBA;
+    color:black;
+    border:none;
+    padding:8px 20px;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* FOOTER */
+.footer{
+    padding:40px;
+    text-align:center;
+    background:#000;
+}
+
+.footer h2{
+    color:#70FFBA;
+    margin-bottom:15px;
+}
+
+/* RESPONSIVO */
+@media(max-width:768px){
+    nav{ display:none; }
+    .hero h1{ font-size:44px; line-height:48px; }
+    .buttons{ flex-direction:column; }
+    .calendario{ gap:5px; }
+    .dia{ min-height:42px; }
+    .dia .num{ font-size:14px; }
+    .dia .preco{ font-size:10px; }
+    .reserva-card{ padding:24px; }
+}
+
+</style>
+</head>
+<body>
+
+<header>
+    <div class="logo" id="logoBtn">XD EVENTOS</div>
+    <nav>
+        <a href="#inicio">Início</a>
+        <a href="#estrutura">Estrutura</a>
+        <a href="#reserva">Reserva</a>
+        <a href="#contato">Contato</a>
+    </nav>
+    <a class="whatsapp" href="https://wa.me/556185840956" target="_blank">WhatsApp</a>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+    <div class="hero-content">
+        <h1>O LUGAR IDEAL PARA<br>SEU <span>EVENTO</span><br>ACONTECER!</h1>
+        <p>Espaço completo, confortável e perfeito para momentos inesquecíveis.</p>
+        <div class="buttons">
+            <a class="btn btn-primary" href="#reserva">Reservar Agora</a>
+            <a class="btn btn-secondary" href="#estrutura">Ver Estrutura</a>
+        </div>
+    </div>
+</section>
+
+<!-- GALERIA -->
+<section class="section" id="estrutura">
+    <div class="title">
+        <span>NOSSA ESTRUTURA</span>
+        <h2>Conforto, lazer e praticidade</h2>
+    </div>
+    <div class="gallery">
+        <img src="imagens/image-24.webp">
+        <img src="imagens/image-25.webp">
+        <img src="imagens/image-26.webp">
+        <img src="imagens/image-27.webp">
+        <img src="imagens/image-28.webp">
+        <img src="imagens/image-29.webp">
+        <img src="imagens/image-30.webp">
+    </div>
+
+    <div class="info-box">
+        <h3>(PROMOÇÃO) Chácara para Aluguel - (Gama DF)</h3>
+        <p><strong>✅ Seg a quinta:</strong> R$649,00</p>
+        <p><strong>✅ Sexta / sábado / domingo:</strong> R$699,90</p>
+        <p><strong>⚠️ Feriados prolongados:</strong> R$749,90</p>
+        <br>
+        <p>Valores referente a 60 pessoas, incluindo crianças e adultos 👱🏽👦🏽</p>
+        <br>
+        <p><strong>⏰ CHECK-IN:</strong> 09:30</p>
+        <p><strong>⏰ CHECK-OUT:</strong> 19:45</p>
+        <br>
+        <h3>Salão incluso:</h3>
+        <ul>
+            <li>Piscina aquecida (solar)</li>
+            <li>Cama Elástica</li>
+            <li>Parquinho infantil</li>
+            <li>Wi-Fi</li>
+            <li>10 jogos de mesas e cadeiras</li>
+            <li>3 cadeiras de praia</li>
+            <li>Fogão industrial com chapa e gás</li>
+            <li>Freezer</li>
+            <li>Microondas</li>
+            <li>Geladeira frost free</li>
+            <li>Churrasqueira com fogão a lenha (não fornecemos lenha)</li>
+            <li>Banheiros individuais</li>
+            <li>Som ambiente (não aceitamos som de fora)</li>
+            <li>Estacionamento privado (10 carros)</li>
+            <li>Área coberta para 60 a 80 pessoas</li>
+            <li>Área externa</li>
+            <li>10% de desconto em brinquedos (não aceitamos infláveis de fora)</li>
+            <li>Não temos dormitório (em breve)</li>
+        </ul>
+        <br>
+        <p><strong>Pagamento:</strong> R$150,00 na reserva, restante 2 dias antes do evento.</p>
+        <p><strong>CONTRATO FORMALIZADO.</strong></p>
+        <br>
+        <p>❌ PROIBIDO SOM AUTOMOTIVO - LEI 8544/78</p>
+        <p>❌ PROIBIDO EVENTO DE BILHETERIA</p>
+    </div>
+</section>
+
+<!-- RESERVA -->
+<section class="reserva-area" id="reserva">
+    <div class="reserva-card">
+
+        <label>Escolha o(s) dia(s) do evento</label>
+
+        <div class="cal-nav">
+            <button id="btnAnterior">&#8592;</button>
+            <span id="mesAnoTexto"></span>
+            <button id="btnProximo">&#8594;</button>
+        </div>
+
+        <div class="calendario" id="calendario"></div>
+
+        <div class="legenda">
+            <div class="legenda-item">
+                <div class="legenda-cor" style="background:#70FFBA;border-color:#00c298;"></div>
+                Dia selecionado
+            </div>
+            <div class="legenda-item">
+                <div class="legenda-cor" style="background:#f5f5f5;opacity:.5;"></div>
+                Indisponível
+            </div>
+        </div>
+
+        <div class="valor-box" id="valorBox">
+            <p>📅 Dias selecionados: <strong id="diasTexto"></strong></p>
+            <p>💰 Valor: <strong id="valorTexto"></strong></p>
+        </div>
+
+        <div class="continuar">
+            <button id="btnConfirmar">Solicitar Reserva via WhatsApp</button>
+        </div>
+
+    </div>
+</section>
+
+<footer class="footer" id="contato">
+    <h2>XD EVENTOS</h2>
+    <p>WhatsApp: +55 61 8584-0956</p>
+</footer>
+
+<!-- MODAL ADMIN -->
+<div class="modal-overlay" id="modalAdmin">
+    <div class="modal-box">
+        <h3>🔐 Área do Administrador</h3>
+        <input type="password" id="inputSenha" placeholder="Digite a senha" />
+        <p class="erro-senha" id="erroSenha">Senha incorreta. Tente novamente.</p>
+        <button class="btn-entrar" onclick="verificarSenha()">Entrar</button>
+        <button class="btn-fechar" onclick="fecharModal()">Cancelar</button>
+    </div>
+</div>
+
+<!-- BARRA ADMIN -->
+<div class="admin-bar" id="adminBar">
+    🔒 MODO ADMIN — Clique nos dias para bloquear/desbloquear
+    <button onclick="sairAdmin()">Sair</button>
+</div>
+
+<script>
+
+// ========== CONFIG ==========
+const SENHA_ADMIN = "1973";
+const WHATSAPP    = "556185840956";
+
+// ========== ESTADO ==========
+let modoAdmin     = false;
+let diasBloqueados = JSON.parse(localStorage.getItem("xd_bloqueados") || "[]");
+let selecionados  = []; // {chave, data, valor}
+
+const hoje = new Date();
+hoje.setHours(0,0,0,0);
+
+let mesVisivel = hoje.getMonth();
+let anoVisivel = hoje.getFullYear();
+
+// ========== CONSTANTES ==========
+const diasSemana  = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
+const mesesNomes  = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho",
+                     "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+
+// ========== ADMIN ==========
+let cliquesLogo = 0, timerLogo;
+
+document.getElementById("logoBtn").addEventListener("click", () => {
+    cliquesLogo++;
+    clearTimeout(timerLogo);
+    timerLogo = setTimeout(() => cliquesLogo = 0, 1500);
+    if(cliquesLogo >= 5){
+        cliquesLogo = 0;
+        document.getElementById("modalAdmin").classList.add("ativo");
+        document.getElementById("inputSenha").value = "";
+        document.getElementById("erroSenha").style.display = "none";
+        setTimeout(() => document.getElementById("inputSenha").focus(), 100);
+    }
+});
+
+document.getElementById("inputSenha").addEventListener("keydown", e => {
+    if(e.key === "Enter") verificarSenha();
+});
+
+function verificarSenha(){
+    if(document.getElementById("inputSenha").value === SENHA_ADMIN){
+        modoAdmin = true;
+        document.getElementById("modalAdmin").classList.remove("ativo");
+        document.getElementById("adminBar").classList.add("ativo");
+        criarCalendario();
+    } else {
+        document.getElementById("erroSenha").style.display = "block";
+        document.getElementById("inputSenha").value = "";
+    }
+}
+
+function fecharModal(){
+    document.getElementById("modalAdmin").classList.remove("ativo");
+}
+
+function sairAdmin(){
+    modoAdmin = false;
+    document.getElementById("adminBar").classList.remove("ativo");
+    criarCalendario();
+}
+
+function salvarBloqueados(){
+    localStorage.setItem("xd_bloqueados", JSON.stringify(diasBloqueados));
+}
+
+// ========== HELPERS ==========
+function chaveData(data){
+    return data.getFullYear()+"-"+(data.getMonth()+1)+"-"+data.getDate();
+}
+
+function formatarDataBrasil(data){
+    return data.toLocaleDateString("pt-BR");
+}
+
+function formatarReal(valor){
+    return valor.toLocaleString("pt-BR",{ style:"currency", currency:"BRL" });
+}
+
+function precoDoDia(data){
+    const d = data.getDay();
+    // Sex=5, Sáb=6, Dom=0
+    return (d === 5 || d === 6 || d === 0) ? 699.90 : 649;
+}
+
+function labelPreco(data){
+    return formatarReal(precoDoDia(data));
+}
+
+// ========== CALENDÁRIO ==========
+function criarCalendario(){
+    const cal = document.getElementById("calendario");
+    cal.innerHTML = "";
+
+    document.getElementById("mesAnoTexto").innerText =
+        mesesNomes[mesVisivel] + " " + anoVisivel;
+
+    // Navegação
+    const primeiroDiaMesAtual    = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+    const primeiroDiaMesVisivel  = new Date(anoVisivel, mesVisivel, 1);
+    const btnAnt = document.getElementById("btnAnterior");
+    btnAnt.disabled = primeiroDiaMesVisivel <= primeiroDiaMesAtual;
+
+    // Cabeçalho
+    diasSemana.forEach(n => {
+        const d = document.createElement("div");
+        d.classList.add("dia-nome");
+        d.innerText = n;
+        cal.appendChild(d);
+    });
+
+    // Espaços vazios
+    const offset = new Date(anoVisivel, mesVisivel, 1).getDay();
+    for(let i = 0; i < offset; i++)
+        cal.appendChild(document.createElement("div"));
+
+    // Dias
+    const totalDias = new Date(anoVisivel, mesVisivel + 1, 0).getDate();
+
+    for(let dia = 1; dia <= totalDias; dia++){
+        const dataCompleta = new Date(anoVisivel, mesVisivel, dia);
+        dataCompleta.setHours(0,0,0,0);
+
+        const chave       = chaveData(dataCompleta);
+        const jaPassou    = dataCompleta < hoje;
+        const bloqueado   = diasBloqueados.includes(chave);
+        const selecionado = selecionados.find(s => s.chave === chave);
+
+        const el = document.createElement("div");
+        el.classList.add("dia");
+
+        // número
+        const num = document.createElement("span");
+        num.classList.add("num");
+        num.innerText = dia;
+        el.appendChild(num);
+
+
+
+        if(jaPassou){
+            el.classList.add("passado");
+
+        } else if(modoAdmin){
+            // MODO ADMIN: clique bloqueia/desbloqueia
+            if(bloqueado) el.classList.add("admin-bloqueado");
+            el.title = bloqueado ? "Clique para desbloquear" : "Clique para bloquear";
+            el.onclick = () => {
+                if(diasBloqueados.includes(chave))
+                    diasBloqueados = diasBloqueados.filter(d => d !== chave);
+                else
+                    diasBloqueados.push(chave);
+                salvarBloqueados();
+                // Remove da seleção se estava selecionado
+                selecionados = selecionados.filter(s => s.chave !== chave);
+                criarCalendario();
+                atualizarValor();
+            };
+
+        } else if(bloqueado){
+            // CLIENTE: dia indisponível
+            el.classList.add("bloqueado");
+
+        } else {
+            // CLIENTE: dia disponível e clicável
+            if(selecionado) el.classList.add("selecionado");
+            el.onclick = () => {
+                if(selecionados.find(s => s.chave === chave)){
+                    selecionados = selecionados.filter(s => s.chave !== chave);
+                    el.classList.remove("selecionado");
+                } else {
+                    selecionados.push({ chave, data: dataCompleta, valor: precoDoDia(dataCompleta) });
+                    el.classList.add("selecionado");
+                }
+                atualizarValor();
+            };
+        }
+
+        cal.appendChild(el);
+    }
+}
+
+// ========== VALOR ==========
+function atualizarValor(){
+    const box = document.getElementById("valorBox");
+
+    if(selecionados.length === 0){
+        box.style.display = "none";
+        return;
+    }
+
+    box.style.display = "block";
+    selecionados.sort((a,b) => a.data - b.data);
+
+    document.getElementById("diasTexto").innerText =
+        selecionados.map(s => formatarDataBrasil(s.data)).join(", ");
+
+    const total = selecionados.reduce((soma, s) => soma + precoDoDia(s.data), 0);
+
+    document.getElementById("valorTexto").innerText = formatarReal(total);
+}
+
+// ========== WHATSAPP ==========
+document.getElementById("btnConfirmar").addEventListener("click", () => {
+    if(selecionados.length === 0){
+        alert("Por favor, selecione pelo menos um dia no calendário.");
+        return;
+    }
+
+    selecionados.sort((a,b) => a.data - b.data);
+
+    const total = selecionados.reduce((soma, s) => soma + precoDoDia(s.data), 0);
+
+    const dias = selecionados.map(s => formatarDataBrasil(s.data)).join(", ");
+    const valor = formatarReal(total);
+
+    const msg = encodeURIComponent(
+        `Olá! Gostaria de reservar a chácara XD Eventos.\n\n` +
+        `📅 Dia(s): ${dias}\n` +
+        `💰 Valor: ${valor}\n\n` +
+        `Aguardo confirmação!`
+    );
+
+    window.open(`https://wa.me/${WHATSAPP}?text=${msg}`, "_blank");
+});
+
+// ========== NAVEGAÇÃO ==========
+document.getElementById("btnAnterior").addEventListener("click", () => {
+    mesVisivel--;
+    if(mesVisivel < 0){ mesVisivel = 11; anoVisivel--; }
+    criarCalendario();
+});
+
+document.getElementById("btnProximo").addEventListener("click", () => {
+    mesVisivel++;
+    if(mesVisivel > 11){ mesVisivel = 0; anoVisivel++; }
+    criarCalendario();
+});
+
+// ========== INIT ==========
+criarCalendario();
+
+</script>
+</body>
+</html>
